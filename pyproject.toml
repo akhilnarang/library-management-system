@@ -5,7 +5,11 @@ description = "Add a short description here"
 authors = [
     { name = "Akhil Narang", email = "me@akhilnarang.dev" }
 ]
-dependencies = []
+dependencies = [
+    "fastapi~=0.97.0",
+    "uvicorn~=0.22.0",
+    "gunicorn~=20.1.0",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
@@ -15,6 +19,11 @@ build-backend = "hatchling.build"
 
 [tool.rye]
 managed = true
+dev-dependencies = [
+    "ruff~=0.0.272",
+    "black~=23.3.0",
+    "mypy~=1.3.0",
+]
 
 [tool.hatch.metadata]
 allow-direct-references = true
