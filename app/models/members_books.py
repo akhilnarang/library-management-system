@@ -10,8 +10,8 @@ from app.utils import current_time
 
 
 class MembersBooks(Base):
-    member_id: int = Column(Integer, ForeignKey("member.id"), primary_key=True)
-    book_id: int = Column(Integer, ForeignKey("book.id"), primary_key=True)
+    member_id: int = Column(Integer, ForeignKey("members.id"), primary_key=True)
+    book_id: int = Column(Integer, ForeignKey("books.id"), primary_key=True)
     borrowed_on: datetime = Column(DateTime, default=current_time)
 
     book: Mapped[Book] = relationship("Book")
