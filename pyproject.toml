@@ -31,3 +31,20 @@ dev-dependencies = [
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.ruff]
+select = ["E", "F", "I"]
+line-length = 120
+exclude = [
+    ".git",
+    "__pycache__",
+    "__init__.py",
+    ".mypy_cache",
+    ".pytest_cache"
+]
+
+[tool.ruff.isort]
+combine-as-imports = true
+
+[tool.black]
+line-length = 120
