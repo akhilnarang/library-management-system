@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app import crud, schemas, constants
+from app import constants, crud, schemas
 from app.api.annotations import DB
 from app.exceptions import NotFoundException, PaymentRequiredException
 
@@ -8,9 +8,7 @@ router = APIRouter()
 
 
 @router.post("/borrow_book")
-def borrow_book(
-    db: DB, members_books: schemas.MembersBooksCreate
-) -> schemas.MembersBooks:
+def borrow_book(db: DB, members_books: schemas.MembersBooksCreate) -> schemas.MembersBooks:
     """
     An endpoint that creates a member-book record in the database.
     """
@@ -33,25 +31,18 @@ def borrow_book(
                 db,
                 db_obj=member,
                 obj_in=schemas.MemberUpdate(
-                    outstanding_payment=member.outstanding_payment
-                    + constants.BOOK_RENT_AMOUNT
+                    outstanding_payment=member.outstanding_payment + constants.BOOK_RENT_AMOUNT
                 ),
                 commit=False,
             )
 
-            return schemas.MembersBooks.from_orm(
-                crud.members_books.create(db, obj_in=members_books)
-            )
+            return schemas.MembersBooks.from_orm(crud.members_books.create(db, obj_in=members_books))
         raise NotFoundException(detail="The requested book does not exist!")
-    return schemas.MembersBooks.from_orm(
-        crud.members_books.create(db, obj_in=members_books)
-    )
+    return schemas.MembersBooks.from_orm(crud.members_books.create(db, obj_in=members_books))
 
 
 @router.post("/return_book")
-def return_book(
-    db: DB, members_books: schemas.MembersBooksReturnRequest
-) -> schemas.MembersBooks:
+def return_book(db: DB, members_books: schemas.MembersBooksReturnRequest) -> schemas.MembersBooks:
     """
     An endpoint that deletes a member-book record from the database.
     """
@@ -69,8 +60,7 @@ def return_book(
                     db,
                     db_obj=member,
                     obj_in=schemas.MemberUpdate(
-                        outstanding_payment=member.outstanding_payment
-                        - constants.BOOK_RENT_AMOUNT
+                        outstanding_payment=member.outstanding_payment - constants.BOOK_RENT_AMOUNT
                     ),
                     commit=False,
                 )

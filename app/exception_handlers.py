@@ -26,9 +26,7 @@ async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse
     )
 
 
-async def handle_internal_server_error(
-    request: Request, exc: Exception
-) -> JSONResponse:
+async def handle_internal_server_error(request: Request, exc: Exception) -> JSONResponse:
     """
     Handles internal server errors
 
@@ -37,10 +35,7 @@ async def handle_internal_server_error(
     :return: A JSONResponse object with the exception details
     """
     logging.error("Internal Server Error", exc_info=exc)
-    if (
-        not isinstance(exc, HTTPException)
-        or exc.status_code != status.HTTP_500_INTERNAL_SERVER_ERROR
-    ):
+    if not isinstance(exc, HTTPException) or exc.status_code != status.HTTP_500_INTERNAL_SERVER_ERROR:
         # If not an HTTPException, convert to one with the relevant information
         exc = HTTPException(
             detail="Internal Server Error",

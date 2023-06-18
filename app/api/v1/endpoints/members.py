@@ -12,10 +12,7 @@ def get_members(db: DB, skip: int = 0, limit: int = 100) -> list[schemas.Member]
     """
     An endpoint that returns a given count of members from the database.
     """
-    return [
-        schemas.Member.from_orm(member)
-        for member in crud.member.get_multi(db, skip=skip, limit=limit)
-    ]
+    return [schemas.Member.from_orm(member) for member in crud.member.get_multi(db, skip=skip, limit=limit)]
 
 
 @router.post("/")
@@ -35,16 +32,12 @@ def get_member(db: DB, member_id: int) -> schemas.Member:
 
 
 @router.put("/{member_id}")
-def update_member(
-    db: DB, member_id: int, member_update: schemas.MemberUpdate
-) -> schemas.Member:
+def update_member(db: DB, member_id: int, member_update: schemas.MemberUpdate) -> schemas.Member:
     """
     An endpoint that updates a member in the database.
     """
     if member := crud.member.get(db, id=member_id):
-        return schemas.Member.from_orm(
-            crud.member.update(db, db_obj=member, obj_in=member_update)
-        )
+        return schemas.Member.from_orm(crud.member.update(db, db_obj=member, obj_in=member_update))
     raise NotFoundException(detail="The requested member does not exist!")
 
 

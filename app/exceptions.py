@@ -6,9 +6,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
 class HTTPException(StarletteHTTPException):
-    def __init__(
-        self, status_code: int, reason: str | None = None, **kwargs: Any
-    ) -> None:
+    def __init__(self, status_code: int, reason: str | None = None, **kwargs: Any) -> None:
         self.status_code = status_code
         self.detail = kwargs.pop("detail", http.HTTPStatus(status_code).phrase)
         self.response = kwargs

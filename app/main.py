@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.requests import Request
 from starlette.responses import Response
 
-from app import exceptions, exception_handlers
+from app import exception_handlers, exceptions
 from app.api.v1.routes import router as api_v1_router
 
 app = FastAPI()
@@ -15,7 +15,5 @@ async def handle_exception(request: Request, exc: Exception) -> Response:
 
 
 @app.exception_handler(exceptions.HTTPException)
-async def handle_http_exception(
-    request: Request, exc: exceptions.HTTPException
-) -> Response:
+async def handle_http_exception(request: Request, exc: exceptions.HTTPException) -> Response:
     return await exception_handlers.http_exception_handler(request, exc)

@@ -5,8 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.models.members_books import MembersBooks
 from app.schemas.members_books import MembersBooksCreate, MembersBooksUpdate
-from .base import CRUDBase
+
 from ..exceptions import NotFoundException
+from .base import CRUDBase
 
 
 class CRUDMembersBooks(CRUDBase[MembersBooks, MembersBooksCreate, MembersBooksUpdate]):
@@ -16,24 +17,17 @@ class CRUDMembersBooks(CRUDBase[MembersBooks, MembersBooksCreate, MembersBooksUp
     def delete(self, db: Session, *, id: int) -> MembersBooks | None:
         raise NotImplementedError
 
-    def get_members_books_by_member_id(
-        self, db: Session, *, member_id: int
-    ) -> list[MembersBooks]:
+    def get_members_books_by_member_id(self, db: Session, *, member_id: int) -> list[MembersBooks]:
         return db.query(MembersBooks).where(column("member_id") == member_id).all()
 
-    def get_members_books_by_book_id(
-        self, db: Session, *, book_id: int
-    ) -> list[MembersBooks]:
+    def get_members_books_by_book_id(self, db: Session, *, book_id: int) -> list[MembersBooks]:
         return db.query(MembersBooks).where(column("book_id") == book_id).all()
 
     def get_members_books_by_member_id_and_book_id(
         self, db: Session, *, member_id: int, book_id: int
     ) -> MembersBooks | None:
         return (
-            db.query(MembersBooks)
-            .where(column("member_id") == member_id)
-            .where(column("book_id") == book_id)
-            .first()
+            db.query(MembersBooks).where(column("member_id") == member_id).where(column("book_id") == book_id).first()
         )
 
     def remove_members_books_by_member_id_and_book_id(
