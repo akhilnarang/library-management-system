@@ -26,6 +26,8 @@ class Settings(BaseSettings):
             port=str(values.get("DB_PORT") or 5432),
         )
 
+    APP_NAME = "Library Management System"
+
     class Config:
         env_file = ".env"
 

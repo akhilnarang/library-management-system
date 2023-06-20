@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<h1>Create a member</h1>
+<form id="form">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" id="name">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control" id="email">
+    </div>
+    <button class="btn btn-primary" onclick="submit_data(event)">Create</button>
+</form>
+<script>
+    async function submit_data(event) {
+        event.preventDefault();
+        let object = {};
+        let elements = document.getElementsByClassName("form-control");
+        Array.from(elements).forEach(function (element) {
+            object[element.id] = element.value;
+        });
+        let json = JSON.stringify(object);
+        console.log(object)
+        let response = await fetch("{{ url_for('create_member') }}", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: json
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.href = "{{ url_for('members_root') }}"
+        } else if (response.status === 409) {
+            alert("This member already exists");
+        } else if (response.status === 422) {
+            alert(`Server error: ${JSON.stringify(response_body.detail)}`);
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</body>
+{% endblock %}

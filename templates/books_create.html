@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<h1>Create a book</h1>
+<form id="form">
+    <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" id="title" name="title" type="text">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="authors">Authors</label>
+        <input class="form-control" id="authors" name="authors" type="text">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="average_rating">Average Rating</label>
+        <input class="form-control" id="average_rating" name="rating" type="number">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="isbn">ISBN</label>
+        <input class="form-control" id="isbn" name="isbn" type="text">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="stock">Stock</label>
+        <input class="form-control" id="stock" name="stock" type="number">
+    </div>
+    <button class="btn btn-primary" onclick="submit_data(event)">Create</button>
+</form>
+<script>
+    async function submit_data(event) {
+        event.preventDefault();
+        let object = {};
+        let elements = document.getElementsByClassName("form-control");
+        Array.from(elements).forEach(function (element) {
+            object[element.id] = element.value;
+        });
+        let json = JSON.stringify(object);
+        console.log(object)
+        let response = await fetch("{{ url_for('create_book') }}", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: json
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.href = "{{ url_for('get_books') }}"
+        } else if (response.status === 409) {
+            alert("This book already exists");
+        } else if (response.status === 422) {
+            alert(`Server error: ${JSON.stringify(response_body.detail)}`);
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</body>
+{% endblock %}

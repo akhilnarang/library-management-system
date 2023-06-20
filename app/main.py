@@ -4,9 +4,11 @@ from starlette.responses import Response
 
 from app import exception_handlers, exceptions
 from app.api.v1.routes import router as api_v1_router
+from app.views.routes import router as views_router
 
 app = FastAPI()
 app.include_router(router=api_v1_router, prefix="/api/v1")
+app.include_router(router=views_router)
 
 
 @app.exception_handler(Exception)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 
 
 class MemberBase(BaseModel):
@@ -10,6 +10,12 @@ class MemberBase(BaseModel):
 class MemberCreate(MemberBase):
     name: str
     email: EmailStr
+
+    @validator("name")
+    def name_must_not_be_empty(cls, name: str) -> str:
+        if len(name.strip()) == 0:
+            raise ValueError("Name must not be empty")
+        return name
 
 
 class MemberUpdate(MemberBase):

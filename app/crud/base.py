@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.db.base_class import Base
-from app.exceptions import BadRequestException
+from app.exceptions import NotFoundException
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -102,7 +102,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
                 db.rollback()
                 raise e
         logging.error(f"Failed to delete object {id=}")
-        raise BadRequestException("Object not found")
+        raise NotFoundException("Object not found")
 
     def commit(self, db: Session) -> None:
         try:

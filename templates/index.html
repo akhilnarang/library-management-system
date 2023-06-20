@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<h1>Welcome to {{ app_name }}</h1>
+<h2>Choose an option</h2>
+<hr>
+<ol>
+{% for option in options %}
+    <li>
+        <a href="{{ option.url }}">{{ option.name }}</a>
+    </li>
+{% endfor %}
+</ol>
+</body>
+{% endblock %}

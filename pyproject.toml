@@ -14,6 +14,7 @@ dependencies = [
     "alembic~=1.11.1",
     "pydantic[dotenv,email]~=1.10.9",
     "jinja2~=3.1.2",
+    "python-multipart~=0.0.6",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

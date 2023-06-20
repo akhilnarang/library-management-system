@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if book %}
+<body>
+<h1>Update a book</h1>
+<form id="form">
+    <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" id="title" name="title" type="text" value="{{ book.title }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="authors">Authors</label>
+        <input class="form-control" id="authors" name="authors" type="text" value="{{ book.authors }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="average_rating">Average Rating</label>
+        <input class="form-control" id="average_rating" name="rating" type="number" value="{{ book.average_rating }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="isbn">ISBN</label>
+        <input class="form-control" id="isbn" name="isbn" type="text" value="{{ book.isbn }}">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="stock">Stock</label>
+        <input class="form-control" id="stock" name="stock" type="number" value="{{ book.stock }}">
+    </div>
+    <button class="btn btn-primary" onclick="submit_data(event)">Update</button>
+</form>
+<script>
+    async function submit_data(event) {
+        event.preventDefault();
+        let object = {};
+        let elements = document.getElementsByClassName("form-control");
+        Array.from(elements).forEach(function (element) {
+            object[element.id] = element.value;
+        });
+        let json = JSON.stringify(object);
+        console.log(object)
+        let response = await fetch("{{ url_for('update_book', book_id=book.id) }}", {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: json
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.href = "{{ url_for('get_books') }}"
+        } else if (response.status === 404) {
+            alert("This book doesn't exist");
+        } else if (response.status === 422) {
+            alert(`Server error: ${JSON.stringify(response_body.detail)}`);
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</body>
+{% else %}
+<h1>Book not found</h1>
+{% endif %}
+{% endblock %}

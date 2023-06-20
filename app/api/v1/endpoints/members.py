@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app import crud, schemas
 from app.api.annotations import DB
-from app.exceptions import NotFoundException
+from app.exceptions import ConflictException, NotFoundException
 
 router = APIRouter()
 
@@ -20,6 +20,10 @@ def create_member(db: DB, member_create: schemas.MemberCreate) -> schemas.Member
     """
     An endpoint that creates a member in the database.
     """
+    if crud.member.get_by_email(db, email=member_create.email):
+        raise ConflictException(
+            detail="Someone with this email already exists!",
+        )
     return schemas.Member.from_orm(crud.member.create(db, obj_in=member_create))
 
 

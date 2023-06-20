@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<h1><a href="{{ url_for('members_create') }}">Create a member</a></h1>
+<h1>Members</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Outstanding Payment</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for member in members %}
+    <tr>
+        <td>{{ member.id }}</td>
+        <td>{{ member.name }}</td>
+        <td>{{ member.email }}</td>
+        <td>{{ member.outstanding_payment }}</td>
+        <td>
+            <button onclick="delete_member(event, '{{member.id}}')">Delete member</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+    async function delete_member(event, member_id) {
+        event.preventDefault();
+        let response = await fetch(`/api/v1/members/${member_id}`, {
+            method: "DELETE",
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.href = "{{ url_for('members_root') }}"
+        } else if (response.status === 400) {
+            alert("This member doesn't exist");
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</body>
+{% endblock %}
