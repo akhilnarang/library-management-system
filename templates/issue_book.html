@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<div class="container">
+<h1>Issue a book</h1>
+<p>
+    <code>{{ book.title }}</code> by {{ book.authors }}
+    <br/>
+    Quantity available: {{ book.stock }}
+    <br/>
+    ISBN: {{ book.isbn }}
+</p>
+<ul class="list-group">
+    {% for member in members %}
+    <li class="list-group-item">
+        <button type="button" class="btn btn-primary" onclick="borrow_book(event, '{{ book.id }}', '{{ member.id }}')">{{ member.name }}</button>
+        <br/>
+    </li>
+    {% endfor %}
+</ul>
+<script>
+    async function borrow_book(event, book_id, member_id) {
+        event.preventDefault();
+        let response = await fetch("{{ url_for('borrow_book') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                book_id: book_id,
+                member_id: member_id,
+            })
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.href = "{{ url_for('borrowed_books_root') }}"
+        } else if (response.status === 400) {
+            alert("This book isn't currently available!")
+        } else if (response.status === 402) {
+            alert("This member has an outstanding payment!")
+        } else if (response.status === 404) {
+            alert("This book or member doesn't exist anymore!");
+
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</div>
+</body>
+{% endblock %}

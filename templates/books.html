@@ -2,6 +2,7 @@
 
 {% block body %}
 <body>
+<div class="container">
 <h1><a href="{{ url_for('books_create') }}">Create a book</a></h1>
 <h1>Books</h1>
 <table class="table">
@@ -13,6 +14,9 @@
         <th>Average Rating</th>
         <th>ISBN</th>
         <th>Stock</th>
+        <th>Delete</th>
+        <th>Issue</th>
+        <th>Update</th>
     </tr>
     </thead>
     <tbody>
@@ -25,7 +29,13 @@
         <td>{{ book.isbn }}</td>
         <td>{{ book.stock }}</td>
         <td>
-            <button onclick="delete_book(event, '{{book.id}}')">Delete book</button>
+            <button class="btn btn-danger" onclick="delete_book(event, '{{book.id}}')">Delete book</button>
+        </td>
+        <td>
+            <a class="btn btn-primary" href="{{ url_for('books_issue', book_id=book.id) }}">Issue book</a>
+        </td>
+        <td>
+            <a class="btn btn-secondary" href="{{ url_for('books_update', book_id=book.id) }}">Update book</a>
         </td>
     </tr>
     {% endfor %}
@@ -39,7 +49,7 @@
         });
         let response_body = await response.json();
         if (response.status === 200) {
-            window.location.href = "{{ url_for('get_books') }}"
+            window.location.href = "{{ url_for('books_root') }}"
         } else if (response.status === 400) {
             alert("This book doesn't exist");
         } else {
@@ -47,5 +57,6 @@
         }
     }
 </script>
+</div>
 </body>
 {% endblock %}

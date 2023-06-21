@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<div class="container">
+<h1>Borrowed Books</h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Member ID</th>
+        <th>Member Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for member_book in member_books %}
+    <tr>
+        <td>{{ member_book.book_id }}</td>
+        <td>{{ member_book.book.title }}</td>
+        <td>{{ member_book.member_id }}</td>
+        <td>{{ member_book.member.name }}</td>
+        <td>
+            <button onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', true)">Return book - Fee paid</button>
+        </td>
+        <td>
+            <button onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', false)">Return book - Fee not paid</button>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script>
+     async function return_book(event, book_id, member_id, paid_fee) {
+        event.preventDefault();
+        let response = await fetch("{{ url_for('return_book') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                book_id: book_id,
+                member_id: member_id,
+                paid_fee: paid_fee,
+            })
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            window.location.reload()
+        } else if (response.status === 404) {
+            alert("This book or member doesn't exist anymore!");
+        } else {
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</div>
+</body>
+{% endblock %}

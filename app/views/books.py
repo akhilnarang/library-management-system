@@ -32,3 +32,20 @@ def books_update(
     return templates.TemplateResponse(
         "books_update.html", {"request": request, "app_name": settings.APP_NAME, "book": crud.book.get(db, id=book_id)}
     )
+
+
+@router.get("/issue/{book_id}", response_class=HTMLResponse)
+def books_issue(
+    request: Request,
+    book_id: int,
+    db: DB,
+) -> Response:
+    return templates.TemplateResponse(
+        "issue_book.html",
+        {
+            "request": request,
+            "app_name": settings.APP_NAME,
+            "book": crud.book.get(db, id=book_id),
+            "members": crud.member.get_multi(db),
+        },
+    )

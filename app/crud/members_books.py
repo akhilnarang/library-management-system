@@ -45,12 +45,11 @@ class CRUDMembersBooks(CRUDBase[MembersBooks, MembersBooksCreate, MembersBooksUp
                     db.commit()
                 else:
                     db.flush()
+                return obj
             except Exception as e:
                 logging.error("Failed to delete object", e.__str__())
                 db.rollback()
                 raise e
-            db.refresh(obj)
-            return obj
         logging.error(f"Failed to delete object {member_id=} {book_id=}")
         raise NotFoundException(detail="Object with the given details not found")
 

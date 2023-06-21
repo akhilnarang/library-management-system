@@ -2,6 +2,7 @@
 
 {% block body %}
 <body>
+<div class="container">
 <h1><a href="{{ url_for('members_create') }}">Create a member</a></h1>
 <h1>Members</h1>
 <table class="table">
@@ -11,6 +12,8 @@
         <th>Name</th>
         <th>Email</th>
         <th>Outstanding Payment</th>
+        <th>Delete</th>
+        <th>Update</th>
     </tr>
     </thead>
     <tbody>
@@ -21,7 +24,10 @@
         <td>{{ member.email }}</td>
         <td>{{ member.outstanding_payment }}</td>
         <td>
-            <button onclick="delete_member(event, '{{member.id}}')">Delete member</button>
+            <button class="btn btn-danger" onclick="delete_member(event, '{{member.id}}')">Delete member</button>
+        </td>
+        <td>
+            <a class="btn btn-primary" href="{{ url_for('members_update', member_id=member.id) }}">Update member</a>
         </td>
     </tr>
     {% endfor %}
@@ -43,5 +49,6 @@
         }
     }
 </script>
+</div>
 </body>
 {% endblock %}

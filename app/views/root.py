@@ -18,6 +18,7 @@ def home(request: Request) -> Response:
             "options": [
                 {"name": "Books", "url": "/books"},
                 {"name": "Members", "url": "/members"},
+                {"name": "Borrowed Books", "url": "/borrowed_books"},
             ],
         },
     )

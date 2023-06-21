@@ -1,8 +1,10 @@
+import logging
+
 from fastapi import APIRouter
 
 from app import constants, crud, schemas
 from app.api.annotations import DB
-from app.exceptions import NotFoundException, PaymentRequiredException
+from app.exceptions import BadRequestException, NotFoundException, PaymentRequiredException
 
 router = APIRouter()
 
@@ -12,6 +14,7 @@ def borrow_book(db: DB, members_books: schemas.MembersBooksCreate) -> schemas.Me
     """
     An endpoint that creates a member-book record in the database.
     """
+    logging.info(f"members_books: {members_books}")
     if member := crud.member.get(db, id=members_books.member_id):
         if member.outstanding_payment >= constants.MAX_OUTSTANDING_ALLOWED:
             raise PaymentRequiredException(
@@ -19,7 +22,7 @@ def borrow_book(db: DB, members_books: schemas.MembersBooksCreate) -> schemas.Me
             )
         if book := crud.book.get(db, id=members_books.book_id):
             if book.stock < 1:
-                raise NotFoundException(detail="The requested book is not available!")
+                raise BadRequestException(detail="The requested book is not available!")
 
             crud.book.update(
                 db,

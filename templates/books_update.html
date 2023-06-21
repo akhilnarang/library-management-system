@@ -3,6 +3,7 @@
 {% block body %}
 {% if book %}
 <body>
+<div class="container">
 <h1>Update a book</h1>
 <form id="form">
     <div class="mb-3">
@@ -44,7 +45,7 @@
         });
         let response_body = await response.json();
         if (response.status === 200) {
-            window.location.href = "{{ url_for('get_books') }}"
+            window.location.href = "{{ url_for('books_root') }}"
         } else if (response.status === 404) {
             alert("This book doesn't exist");
         } else if (response.status === 422) {
@@ -54,6 +55,7 @@
         }
     }
 </script>
+</div>
 </body>
 {% else %}
 <h1>Book not found</h1>
