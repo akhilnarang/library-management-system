@@ -16,6 +16,7 @@ dependencies = [
     "jinja2~=3.1.2",
     "python-multipart~=0.0.6",
     "httpx~=0.24.1",
+    "rich~=13.4.2",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
