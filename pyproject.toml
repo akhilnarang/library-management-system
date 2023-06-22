@@ -33,6 +33,10 @@ dev-dependencies = [
     "mypy~=1.3.0",
 ]
 
+[tool.rye.scripts]
+devserver = "uvicorn app.main:app"
+migrate = "alembic upgrade head"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
