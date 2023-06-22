@@ -21,6 +21,7 @@ def home(request: Request) -> Response:
                 {"name": "Borrowed Books", "url": request.url_for("borrowed_books_root")},
                 {"name": "Import Books", "url": request.url_for("books_import")},
                 {"name": "Search for Books", "url": request.url_for("books_search")},
+                {"name": "Transactions", "url": request.url_for("transactions_root")},
             ],
         },
     )

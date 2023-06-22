@@ -59,6 +59,12 @@ def clear_dues(db: DB, member_id: int) -> schemas.Member:
     An endpoint that clears the dues of a member.
     """
     if member := crud.member.get(db, id=member_id):
+        if member.outstanding_payment == 0:
+            raise ConflictException(detail="The selected member does not have any outstanding payment!")
+
+        crud.transaction.create(
+            db, obj_in=schemas.TransactionCreate(member_id=member_id, amount=member.outstanding_payment), commit=False
+        )
         return schemas.Member.from_orm(
             crud.member.update(db, db_obj=member, obj_in=schemas.MemberUpdate(outstanding_payment=0))
         )

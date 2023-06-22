@@ -4,3 +4,4 @@ from app.db.base_class import Base  # noqa
 from app.models.book import Book  # noqa
 from app.models.member import Member  # noqa
 from app.models.members_books import MembersBooks  # noqa
+from app.models.transaction import Transaction  # noqa

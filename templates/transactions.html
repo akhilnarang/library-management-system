@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<div class="container">
+    <h1>Transactions</h1>
+    <a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Member ID</th>
+            <th>Member Name</th>
+            <th>Book details (if any)</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.id }}</td>
+            <td>{{ transaction.member.id }}</td>
+            <td>{{ transaction.member.name }}</td>
+            {% if transaction.book %}
+            <td>{{ transaction.book.title }} ({{ transaction.book.id }})</td>
+            {% else %}
+            <td>---</td>
+            {% endif %}
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.paid_on }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+{% endblock %}

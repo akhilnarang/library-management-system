@@ -69,6 +69,16 @@ def return_book(db: DB, members_books: schemas.MembersBooksReturnRequest) -> sch
                     commit=False,
                 )
 
+                crud.transaction.create(
+                    db,
+                    obj_in=schemas.TransactionCreate(
+                        book_id=members_books.book_id,
+                        member_id=members_books.member_id,
+                        amount=constants.BOOK_RENT_AMOUNT,
+                    ),
+                    commit=False,
+                )
+
             return schemas.MembersBooks.from_orm(
                 crud.members_books.remove_members_books_by_member_id_and_book_id(
                     db, member_id=members_books.member_id, book_id=members_books.book_id
