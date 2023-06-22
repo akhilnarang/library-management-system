@@ -3,29 +3,29 @@
 {% block body %}
 <body>
 <div class="container">
-<h1>Import books</h1>
-<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
-<form id="form">
-    <div class="mb-3">
-        <label class="form-label" for="title">Title</label>
-        <input class="form-control" id="title" name="title" type="text">
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="authors">Authors</label>
-        <input class="form-control" id="authors" name="authors" type="text">
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="isbn">ISBN</label>
-        <input class="form-control" id="isbn" name="isbn" type="text">
-    </div>
-    <div class="mb-3">
-        <label class="form-label" for="publisher">Publisher}</label>
-        <input class="form-control" id="publisher" name="publisher" type="text">
-    </div>
-    <br/>
-    <button class="btn btn-secondary" onclick="submit_data(event, true)">Search</button>
-    <button class="btn btn-primary" onclick="submit_data(event, false)">Import</button>
-</form>
+    <h1>Import books</h1>
+    <a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
+    <form id="form">
+        <div class="mb-3">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" id="title" name="title" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="authors">Authors</label>
+            <input class="form-control" id="authors" name="authors" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="isbn">ISBN</label>
+            <input class="form-control" id="isbn" name="isbn" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="publisher">Publisher</label>
+            <input class="form-control" id="publisher" name="publisher" type="text">
+        </div>
+        <br/>
+        <button class="btn btn-secondary" onclick="submit_data(event, true)">Search</button>
+        <button class="btn btn-primary" onclick="submit_data(event, false)">Import</button>
+    </form>
 </div>
 <div class="container" id="results" style="display: none">
     <table class="table">
@@ -57,20 +57,24 @@
         });
         let response_body = await response.json();
         if (response.status === 200) {
-            let results = document.getElementById("results");
-            results.style.display = "block";
-            let tbody = results.getElementsByTagName("tbody")[0];
-            tbody.innerHTML = "";
-            response_body.forEach(function (book) {
-                let row = tbody.insertRow();
-                row.insertCell().innerHTML = book.title;
-                row.insertCell().innerHTML = book.authors;
-                row.insertCell().innerHTML = book.isbn;
-                row.insertCell().innerHTML = book.publisher;
-            });
-            if (!only_search) {
-                window.location.href = "{{ url_for('books_root') }}";
+            if (response_body.length === 0) {
+                alert("No books found");
+                return;
             }
+            if (only_search) {
+                let results = document.getElementById("results");
+                results.style.display = "block";
+                let tbody = results.getElementsByTagName("tbody")[0];
+                tbody.innerHTML = "";
+                response_body.forEach(function (book) {
+                    let row = tbody.insertRow();
+                    row.insertCell().innerHTML = book.title;
+                    row.insertCell().innerHTML = book.authors;
+                    row.insertCell().innerHTML = book.isbn;
+                    row.insertCell().innerHTML = book.publisher;
+                });
+            }
+            window.location.href = "{{ url_for('books_root') }}";
         } else if (response.status === 409) {
             alert("This book already exists");
         } else if (response.status === 422) {

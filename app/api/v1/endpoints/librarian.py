@@ -98,6 +98,7 @@ def import_books(
                 obj_in=schemas.BookCreate(
                     title=book.title,
                     authors=book.authors,
+                    publisher=book.publisher,
                     isbn=book.isbn,
                     average_rating=book.average_rating,
                 ),
