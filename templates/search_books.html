@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+<div class="container">
+    <h1>Search for Books</h1>
+    <a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
+    <form id="form">
+        <div class="mb-3">
+            <label class="form-label" for="title">Title</label>
+            <input class="form-control" id="title" name="title" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="authors">Authors</label>
+            <input class="form-control" id="authors" name="authors" type="text">
+        </div>
+        <button class="btn btn-primary" onclick="search(event)">Search</button>
+    </form>
+</div>
+<div class="container" id="results" style="display: none">
+    <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Authors</th>
+          <th>Publisher</th>
+          <th>Average Rating</th>
+          <th>ISBN</th>
+          <th>Stock</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+    async function search(event) {
+        event.preventDefault();
+
+        const data = new URLSearchParams();
+
+        let title = document.getElementById("title").value;
+        if (title) {
+            data.append("title", title);
+        }
+
+        let authors = document.getElementById("authors").value;
+        if (authors) {
+            data.append("authors", authors);
+        }
+
+        let response = await fetch("{{ url_for('search_books') }}?" + data, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"},
+        });
+        let response_body = await response.json();
+        if (response.status === 200) {
+            if (response_body.length === 0) {
+                alert("No books found");
+                return;
+            }
+            let results = document.getElementById("results");
+            results.style.display = "block";
+            let tbody = results.getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+            response_body.forEach(function (book) {
+                let row = tbody.insertRow();
+                row.insertCell().innerHTML = book.id;
+                row.insertCell().innerHTML = book.title;
+                row.insertCell().innerHTML = book.authors;
+                row.insertCell().innerHTML = book.publisher;
+                row.insertCell().innerHTML = book.average_rating;
+                row.insertCell().innerHTML = book.isbn;
+                row.insertCell().innerHTML = book.stock;
+
+            });
+        } else {
+            alert(`Server error: ${JSON.stringify(response_body.detail)}`);
+            console.log(`Error: ${JSON.stringify(response_body)}`)
+        }
+    }
+</script>
+</body>
+{% endblock %}

@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from typing import Annotated
+
+from fastapi import APIRouter, Query
 
 from app import crud, schemas
 from app.api.annotations import DB
@@ -27,14 +29,6 @@ def create_book(db: DB, book_create: schemas.BookCreate) -> schemas.Book:
     return schemas.Book.from_orm(crud.book.create(db, obj_in=book_create))
 
 
-@router.get("/{book_id}")
-def get_book(db: DB, book_id: int) -> schemas.Book:
-    """
-    An endpoint that returns a book from the database.
-    """
-    return schemas.Book.from_orm(crud.book.get(db, id=book_id))
-
-
 @router.put("/{book_id}")
 def update_book(db: DB, book_id: int, book_update: schemas.BookUpdate) -> schemas.Book:
     """
@@ -55,3 +49,15 @@ def delete_book(db: DB, book_id: int) -> schemas.Book:
             detail="This book is currently issued to a member!",
         )
     return schemas.Book.from_orm(crud.book.remove(db, id=book_id))
+
+
+@router.get("/search")
+def search_books(
+    db: DB,
+    title: Annotated[str | None, Query(description="Title of the book you want to search for")] = None,
+    author: Annotated[str | None, Query(description="Author of the book you want to search for")] = None,
+) -> list[schemas.Book]:
+    """
+    An endpoint that returns a given count of books from the database.
+    """
+    return [schemas.Book.from_orm(book) for book in crud.book.search(db, title=title, authors=author)]

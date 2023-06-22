@@ -20,6 +20,7 @@ def home(request: Request) -> Response:
                 {"name": "Members", "url": request.url_for("members_root")},
                 {"name": "Borrowed Books", "url": request.url_for("borrowed_books_root")},
                 {"name": "Import Books", "url": request.url_for("books_import")},
+                {"name": "Search for Books", "url": request.url_for("books_search")},
             ],
         },
     )

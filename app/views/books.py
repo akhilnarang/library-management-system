@@ -56,3 +56,10 @@ def books_import(
     request: Request,
 ) -> Response:
     return templates.TemplateResponse("import_books.html", {"request": request, "app_name": settings.APP_NAME})
+
+
+@router.get("/search", response_class=HTMLResponse)
+def books_search(
+    request: Request,
+) -> Response:
+    return templates.TemplateResponse("search_books.html", {"request": request, "app_name": settings.APP_NAME})
