@@ -55,6 +55,8 @@
             window.location.href = "{{ url_for('books_root') }}"
         } else if (response.status === 400) {
             alert("This book doesn't exist");
+        } else if (response.status === 409) {
+            alert("This book is currently issued to a member!");
         } else {
             console.log(`Error: ${JSON.stringify(response_body)}`)
         }

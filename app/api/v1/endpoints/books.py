@@ -50,4 +50,8 @@ def delete_book(db: DB, book_id: int) -> schemas.Book:
     """
     An endpoint that deletes a book from the database.
     """
+    if crud.members_books.get_members_books_by_book_id(db, book_id=book_id):
+        raise ConflictException(
+            detail="This book is currently issued to a member!",
+        )
     return schemas.Book.from_orm(crud.book.remove(db, id=book_id))
