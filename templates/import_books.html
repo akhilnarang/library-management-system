@@ -73,8 +73,9 @@
                     row.insertCell().innerHTML = book.isbn;
                     row.insertCell().innerHTML = book.publisher;
                 });
+            } else {
+                window.location.href = "{{ url_for('books_root') }}";
             }
-            window.location.href = "{{ url_for('books_root') }}";
         } else if (response.status === 409) {
             alert("This book already exists");
         } else if (response.status === 422) {
