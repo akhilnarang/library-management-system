@@ -4,6 +4,7 @@
 <body>
 <div class="container">
 <h1>Create a member</h1>
+<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
 <form id="form">
     <div class="form-group">
         <label for="name">Name</label>
@@ -13,6 +14,7 @@
         <label for="email">Email</label>
         <input class="form-control" id="email">
     </div>
+    <br/>
     <button class="btn btn-primary" onclick="submit_data(event)">Create</button>
 </form>
 <script>

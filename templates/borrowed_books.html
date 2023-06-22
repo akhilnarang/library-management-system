@@ -4,6 +4,7 @@
 <body>
 <div class="container">
 <h1>Borrowed Books</h1>
+<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
 <table class="table">
     <thead>
     <tr>
@@ -11,6 +12,8 @@
         <th>Title</th>
         <th>Member ID</th>
         <th>Member Name</th>
+        <th>Return book - Fee paid</th>
+        <th>Return book - Fee not paid</th>
     </tr>
     </thead>
     <tbody>
@@ -21,10 +24,10 @@
         <td>{{ member_book.member_id }}</td>
         <td>{{ member_book.member.name }}</td>
         <td>
-            <button onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', true)">Return book - Fee paid</button>
+            <button class="btn btn-primary" onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', true)">Return</button>
         </td>
         <td>
-            <button onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', false)">Return book - Fee not paid</button>
+            <button class="btn btn-danger" onclick="return_book(event, '{{member_book.book_id}}', '{{member_book.member_id}}', false)">Return</button>
         </td>
     </tr>
     {% endfor %}

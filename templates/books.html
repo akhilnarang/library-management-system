@@ -3,8 +3,9 @@
 {% block body %}
 <body>
 <div class="container">
-<h1><a href="{{ url_for('books_create') }}">Create a book</a></h1>
 <h1>Books</h1>
+<a class="btn btn-primary" href="{{ url_for('books_create') }}">Create a book</a>
+<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
 <table class="table">
     <thead>
     <tr>

@@ -4,6 +4,7 @@
 <body>
 <div class="container">
 <h1>Create a book</h1>
+<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
 <form id="form">
     <div class="mb-3">
         <label class="form-label" for="title">Title</label>
@@ -25,6 +26,7 @@
         <label class="form-label" for="stock">Stock</label>
         <input class="form-control" id="stock" name="stock" type="number">
     </div>
+    <br/>
     <button class="btn btn-primary" onclick="submit_data(event)">Create</button>
 </form>
 <script>

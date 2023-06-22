@@ -6,10 +6,11 @@
 <h1>Welcome to {{ app_name }}</h1>
 <h2>Choose an option</h2>
 <hr>
-<ol>
+<ol class="list-group">
 {% for option in options %}
     <li>
-        <a href="{{ option.url }}">{{ option.name }}</a>
+        <a class="btn btn-primary btn-small" href="{{ option.url }}">{{ option.name }}</a>
+        <br/><br/>
     </li>
 {% endfor %}
 </ol>
