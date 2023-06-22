@@ -28,6 +28,8 @@ class Settings(BaseSettings):
 
     APP_NAME = "Library Management System"
 
+    MOCK_FRAPPE_CLIENT = False
+
     class Config:
         env_file = ".env"
 

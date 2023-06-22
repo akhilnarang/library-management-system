@@ -16,9 +16,10 @@ def home(request: Request) -> Response:
             "request": request,
             "app_name": settings.APP_NAME,
             "options": [
-                {"name": "Books", "url": "/books"},
-                {"name": "Members", "url": "/members"},
-                {"name": "Borrowed Books", "url": "/borrowed_books"},
+                {"name": "Books", "url": request.url_for("books_root")},
+                {"name": "Members", "url": request.url_for("members_root")},
+                {"name": "Borrowed Books", "url": request.url_for("borrowed_books_root")},
+                {"name": "Import Books", "url": request.url_for("books_import")},
             ],
         },
     )

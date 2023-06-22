@@ -6,4 +6,8 @@ from .members_books import (
     MembersBooksUpdate,
     MembersBooksReturnRequest,
 )
-from .frappe import APIResponse as FrappeAPIResponse, APIRequestParameters as FrappeAPIRequestParameters
+from .frappe import (
+    APIResponse as FrappeAPIResponse,
+    APIRequestParameters as FrappeAPIRequestParameters,
+    Book as FrappeBook,
+)

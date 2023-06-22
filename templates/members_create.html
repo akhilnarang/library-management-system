@@ -26,7 +26,6 @@
             object[element.id] = element.value;
         });
         let json = JSON.stringify(object);
-        console.log(object)
         let response = await fetch("{{ url_for('create_member') }}", {
             method: "POST",
             headers: {"Content-Type": "application/json"},

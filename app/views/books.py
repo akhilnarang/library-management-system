@@ -49,3 +49,10 @@ def books_issue(
             "members": crud.member.get_multi(db),
         },
     )
+
+
+@router.get("/import", response_class=HTMLResponse)
+def books_import(
+    request: Request,
+) -> Response:
+    return templates.TemplateResponse("import_books.html", {"request": request, "app_name": settings.APP_NAME})

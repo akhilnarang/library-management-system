@@ -31,7 +31,6 @@
             object[element.id] = element.value;
         });
         let json = JSON.stringify(object);
-        console.log(object)
         let response = await fetch("{{ url_for('update_member', member_id=member.id) }}", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},

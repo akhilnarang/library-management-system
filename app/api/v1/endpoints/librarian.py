@@ -1,8 +1,9 @@
 import logging
+from typing import Annotated
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
-from app import constants, crud, schemas
+from app import clients, constants, crud, schemas
 from app.api.annotations import DB
 from app.exceptions import BadRequestException, NotFoundException, PaymentRequiredException
 
@@ -75,3 +76,32 @@ def return_book(db: DB, members_books: schemas.MembersBooksReturnRequest) -> sch
             )
         raise NotFoundException(detail="The requested book does not exist!")
     raise NotFoundException(detail="The requested member does not exist!")
+
+
+@router.post("/import_books")
+def import_books(
+    db: DB,
+    data: schemas.FrappeAPIRequestParameters,
+    only_search: Annotated[bool, Query(description="Just search, don't import")],
+) -> list[schemas.FrappeBook]:
+    """
+    An endpoint that creates a member-book record in the database.
+    """
+    books = clients.FrappeClient.get_books(data)
+    if not only_search:
+        for book in books.message:
+            if crud.book.get_by_isbn(db, isbn=book.isbn):
+                logging.info(f"Book with ISBN {book.isbn} already exists in the database, skipping!")
+                continue
+            crud.book.create(
+                db,
+                obj_in=schemas.BookCreate(
+                    title=book.title,
+                    authors=book.authors,
+                    isbn=book.isbn,
+                    average_rating=book.average_rating,
+                ),
+                commit=False,
+            )
+        crud.book.commit(db)
+    return books.message
