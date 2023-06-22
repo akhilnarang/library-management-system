@@ -17,3 +17,6 @@
 
 ## Screenshots
 - They can be found [here](/screenshots.md)
+
+## Deployed application
+- A version of this application is deployed [here](https://library-management-system.akhilnarang.dev)
