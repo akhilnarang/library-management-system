@@ -51,3 +51,15 @@ def delete_member(db: DB, member_id: int) -> schemas.Member:
     An endpoint that deletes a member from the database.
     """
     return schemas.Member.from_orm(crud.member.remove(db, id=member_id))
+
+
+@router.post("/clear_dues/{member_id}")
+def clear_dues(db: DB, member_id: int) -> schemas.Member:
+    """
+    An endpoint that clears the dues of a member.
+    """
+    if member := crud.member.get(db, id=member_id):
+        return schemas.Member.from_orm(
+            crud.member.update(db, db_obj=member, obj_in=schemas.MemberUpdate(outstanding_payment=0))
+        )
+    raise NotFoundException(detail="The requested member does not exist!")

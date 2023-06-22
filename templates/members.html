@@ -3,53 +3,72 @@
 {% block body %}
 <body>
 <div class="container">
-<h1>Members</h1>
-<a class="btn btn-primary" href="{{ url_for('members_create') }}">Create a member</a>
-<a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
-<table class="table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Outstanding Payment</th>
-        <th>Delete</th>
-        <th>Update</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for member in members %}
-    <tr>
-        <td>{{ member.id }}</td>
-        <td>{{ member.name }}</td>
-        <td>{{ member.email }}</td>
-        <td>{{ member.outstanding_payment }}</td>
-        <td>
-            <button class="btn btn-danger" onclick="delete_member(event, '{{member.id}}')">Delete member</button>
-        </td>
-        <td>
-            <a class="btn btn-primary" href="{{ url_for('members_update', member_id=member.id) }}">Update member</a>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-<script>
-    async function delete_member(event, member_id) {
-        event.preventDefault();
-        let response = await fetch(`/api/v1/members/${member_id}`, {
-            method: "DELETE",
-        });
-        let response_body = await response.json();
-        if (response.status === 200) {
-            window.location.href = "{{ url_for('members_root') }}"
-        } else if (response.status === 400) {
-            alert("This member doesn't exist");
-        } else {
-            console.log(`Error: ${JSON.stringify(response_body)}`)
+    <h1>Members</h1>
+    <a class="btn btn-primary" href="{{ url_for('members_create') }}">Create a member</a>
+    <a class="btn btn-secondary" href="{{ url_for('home') }}">Home</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Outstanding Payment</th>
+            <th>Delete</th>
+            <th>Update</th>
+            <th>Clear dues</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.id }}</td>
+            <td>{{ member.name }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.outstanding_payment }}</td>
+            <td>
+                <button class="btn btn-danger" onclick="delete_member(event, '{{member.id}}')">Delete member</button>
+            </td>
+            <td>
+                <a class="btn btn-primary" href="{{ url_for('members_update', member_id=member.id) }}">Update member</a>
+            </td>
+            <td>
+                <button class="btn btn-secondary" onclick="clear_dues(event, '{{member.id}}')">Clear dues</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        async function delete_member(event, member_id) {
+            event.preventDefault();
+            let response = await fetch(`/api/v1/members/${member_id}`, {
+                method: "DELETE",
+            });
+            let response_body = await response.json();
+            if (response.status === 200) {
+                window.location.href = "{{ url_for('members_root') }}"
+            } else if (response.status === 400) {
+                alert("This member doesn't exist");
+            } else {
+                console.log(`Error: ${JSON.stringify(response_body)}`)
+            }
         }
-    }
-</script>
+
+        async function clear_dues(event, member_id) {
+            event.preventDefault();
+            let response = await fetch(`/api/v1/members/clear_dues/${member_id}`, {
+                method: "POST",
+            });
+            let response_body = await response.json();
+            if (response.status === 200) {
+                window.location.href = "{{ url_for('members_root') }}"
+            } else if (response.status === 404) {
+                alert("This member doesn't exist");
+            } else {
+                console.log(`Error: ${JSON.stringify(response_body)}`)
+            }
+        }
+    </script>
 </div>
 </body>
 {% endblock %}
